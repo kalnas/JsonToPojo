@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JsonToPojo</title>
+<style>
+	textarea {
+		width: 80%;
+		height: 400px;
+		font-family: monospace;
+		display: block;
+		margin-bottom: 10px;
+	}
+	
+	div {
+		width: 80%;
+		margin-bottom: 10px;	
+	}
+	
+	button {
+		width: 80%;
+		height: 35px;
+		margin-bottom: 10px;		
+	}
+</style>
+
+<script src="JsonToPojo.js"></script>
+
+<script>
+	function documentLoaded(evt) {	
+		document.querySelector('button').addEventListener("click", function(event) {
+				var json = document.querySelector('#input').value; 			
+			
+				document.querySelector('#output').value = jsonToPojoConverter().convert(json);
+
+	// 			document.querySelector('#output').value += 
+	// 				JSON.stringify(objectDefinition)
+	// 					.replace(/(,|\{)/g, '$1\n  ')
+	// 					.replace(/(\})/g, '\n$1');
+						
+			});
+	}
+</script>
+
+</head>
+<body onload="documentLoaded()">
+<h2>JsonToPojo</h2>
+<div>This is a quick and dirty converter that takes a JSON object and produces the necessary Java code.
+The resulting class(es) will be immutable and minimalistic, with the needed Jackson annotations for serialization.
+All implicit annotations are omitted. Illegal Java names will have to be tweaked.
+</div>
+<textarea id="input">
+{
+    "id": 45,
+    "cost": 67.32,
+    "message": "Hello World!",
+    "available": true,
+    "days": ["Mon", "Tue"],
+    "customer": [ 
+        { 
+            "name": "Bob",
+            "yearsOfService": 6 
+        },
+		
+        { 
+            "name": "Mary",
+            "yearsOfService": 3,
+            "gender": "female" 
+        }					
+    ],
+    "expiration": "2016-05-1",
+    "Obj": {
+        "fld1": "Bob",
+        "fld2": "Mary"
+    }
+}		
+</textarea>
+<button>&#9660;&nbsp;&nbsp;C O N V E R T&nbsp;&nbsp;&#9660;</button>
+<textarea id="output"></textarea>
+
+</body>
+</html>
