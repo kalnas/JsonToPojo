@@ -124,6 +124,8 @@ function jsonToPojoConverter() {
 			result += '    ' + 'public ' + fields[i].typeDeclaration + ' ' + javaGetterName + '() {\n        return ' + fields[i].fieldName + ';\n    }\n' + (i === fields.length - 1 ? '' : '\n');
 		}
 
+		result += '\n\n\n\n';
+		
 		// output public setters
 		for (var i = 0; i < fields.length; i++) {
 			result += '    ' + 'public void set' + capitalize(fields[i].fieldName) + '(' + fields[i].typeDeclaration + ' ' + fields[i].fieldName + ') {\n        this.' + fields[i].fieldName + ' = ' + fields[i].fieldName + ';\n    }\n' + (i === fields.length - 1 ? '' : '\n');
