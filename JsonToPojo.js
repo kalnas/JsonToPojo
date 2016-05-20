@@ -93,20 +93,22 @@ function jsonToPojoConverter() {
 	function getJavaClassDefinition(className, fields) {
 		var result = '';
 	
-		result += '@JsonInclude(JsonInclude.Include.NON_EMPTY)\n';
-		result += '@JsonIgnoreProperties(ignoreUnknown = true)\n';		
 		result += 'public class ' + className + ' {\n\n';		
 	
 		// output list of private fields
 		for (var i = 0; i < fields.length; i++) {
-			result += '    final private ' + fields[i].typeDeclaration + ' ' + fields[i].fieldName + ';\n';
+			result += '    private ' + fields[i].typeDeclaration + ' ' + fields[i].fieldName + ';\n';
 		}
 	
+		result += '\n\n';
+	
+		// output default constructor
+		result += '    public ' + className + '() {}\n\n';
+	
 		// output constructor parameters
-		result += '\n    @JsonCreator\n';
 		result += '    public ' + className + '(\n';
 		for (var i = 0; i < fields.length; i++) {
-			result += '         @JsonProperty("' + fields[i].fieldName + '") ' + fields[i].typeDeclaration + ' ' + fields[i].fieldName + (i === fields.length - 1 ? ') ' : ',\n');
+			result += '         ' + fields[i].typeDeclaration + ' ' + fields[i].fieldName + (i === fields.length - 1 ? ') ' : ',\n');
 		}	
 	
 		// output constructor content
@@ -120,6 +122,11 @@ function jsonToPojoConverter() {
 		for (var i = 0; i < fields.length; i++) {
 			var javaGetterName = ( fields[i].typeDeclaration === 'Boolean' ? 'is' :'get' ) + capitalize(fields[i].fieldName);
 			result += '    ' + 'public ' + fields[i].typeDeclaration + ' ' + javaGetterName + '() {\n        return ' + fields[i].fieldName + ';\n    }\n' + (i === fields.length - 1 ? '' : '\n');
+		}
+
+		// output public setters
+		for (var i = 0; i < fields.length; i++) {
+			result += '    ' + 'public void set' + capitalize(fields[i].fieldName) + '(' + fields[i].typeDeclaration + ' ' + fields[i].fieldName + ') {\n        this.' + fields[i].fieldName + ' = ' + fields[i].fieldName + ';\n    }\n' + (i === fields.length - 1 ? '' : '\n');
 		}
 	
 		result += '}\n\n\n';
